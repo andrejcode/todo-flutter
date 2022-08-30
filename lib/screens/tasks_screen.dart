@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter/screens/add_task_screen.dart';
 import 'package:todo_flutter/widgets/tasks_list.dart';
-import 'package:todo_flutter/models/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_flutter/models/task_data.dart';
 
-class TasksScreen extends StatefulWidget {
+class TasksScreen extends StatelessWidget {
   const TasksScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TasksScreen> createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [
-    Task(name: 'Buy milk'),
-    Task(name: 'Buy eggs'),
-    Task(name: 'Buy bread')
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +36,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ),
               Text(
-                '${tasks.length} tasks',
+                '${Provider.of<TaskData>(context).taskCount} tasks',
                 style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
             ],
@@ -61,7 +50,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20))),
-            child: TaskList(tasks: tasks),
+            child: const TaskList(),
           ),
         )
       ]),
@@ -72,16 +61,10 @@ class _TasksScreenState extends State<TasksScreen> {
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(
-                      child: Container(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: AddTaskScreen((newTaskTitle) {
-                      setState(() {
-                        tasks.add(Task(name: newTaskTitle));
-                      });
-                      Navigator.pop(context);
-                    }),
-                  )));
+                  child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: const AddTaskScreen())));
         },
         child: const Icon(Icons.add),
       ),
